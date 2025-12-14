@@ -1,0 +1,92 @@
+<h2 class="mb-4 text-primary fw-bold d-flex align-items-center">
+  <span style="color:#0d6efd; font-size:32px;" class="me-2">📦</span>
+  Gestion des Produits
+</h2>
+
+<form #produitForm="ngForm" novalidate>
+  <div class="card p-4 mb-4 rounded-3 shadow-lg d-flex justify-content-center align-items-center"
+       style="border-width: 2px; border-color:#cfe2ff; min-height: 250px;">
+
+    <div style="width: 100%;">
+      <div class="mb-3">
+        <input type="text" class="form-control mb-2" placeholder="Nom du produit"
+               [(ngModel)]="nom" name="nom" required #nomInput="ngModel">
+        <div class="text-danger small" *ngIf="nomInput.invalid && nomInput.touched">
+          Le nom du produit est requis.
+        </div>
+
+        <input type="number" class="form-control mb-2" placeholder="Prix (€)"
+               [(ngModel)]="prix" name="prix" required min="0.01" #prixInput="ngModel">
+        <div class="text-danger small" *ngIf="prixInput.invalid && prixInput.touched">
+          Entrez un prix valide.
+        </div>
+
+        <input type="number" class="form-control mb-2" placeholder="Quantité"
+               [(ngModel)]="quantite" name="quantite" required min="1" #quantiteInput="ngModel">
+        <div class="text-danger small" *ngIf="quantiteInput.invalid && quantiteInput.touched">
+          Entrez une quantité valide.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-primary fw-bold"
+                [ngClass]="editingId ? 'btn-success' : 'btn-primary'"
+                (click)="saveProduit()">
+          {{ editingId ? 'Modifier' : 'Ajouter' }} Produit
+        </button>
+        <button *ngIf="editingId" class="btn btn-secondary ms-2" (click)="resetForm()">
+          Annuler
+        </button>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+
+<div class="mt-4">
+  <table class="table table-hover table-bordered align-middle text-center bg-white">
+    <thead class="table-primary text-white">
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prix</th>
+        <th>Quantité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produit of produits">
+        <td>{{ produit.id }}</td>
+        <td class="fw-semibold">{{ produit.nom }}</td>
+        <td>{{ produit.prix }} €</td>
+        <td>{{ produit.quantite }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm me-2" (click)="editProduit(produit)">
+            Modifier
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteProduit(produit.id)">
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<style>
+  .card {
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+  }
+
+  table.table-hover tbody tr:hover {
+    background-color: #cfe2ff !important; 
+    transition: background-color 0.3s;
+  }
+
+  table th, table td {
+    vertical-align: middle;
+  }
+</style>

@@ -1,0 +1,88 @@
+
+<div *ngIf="message" class="alert alert-{{ messageType }} mt-2 text-center fw-bold" role="alert">
+  {{ message }}
+</div>
+
+<h2 class="mb-4 text-primary fw-bold">🧾 Nouvelle Facture</h2>
+
+
+<div class="card p-4 mb-4 rounded-3 shadow-lg" style="border-width: 2px; border-color:#cfe2ff">
+  
+  <div class="mb-3">
+    <label class="form-label fw-bold">Date</label>
+    <input type="date" [(ngModel)]="date" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label fw-bold">Client</label>
+    <select [(ngModel)]="clientId" class="form-control text-dark">
+      <option [ngValue]="null">-- Choisir client --</option>
+      <option *ngFor="let c of clients" [ngValue]="c.id">{{ c.nom }}</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label fw-bold">Produit</label>
+    <select [(ngModel)]="produitId" class="form-control text-dark">
+      <option [ngValue]="null">-- Choisir produit --</option>
+      <option *ngFor="let p of produits" [ngValue]="p.id">{{ p.nom }} - {{ p.prix }} €</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label fw-bold">Quantité</label>
+    <input type="number" [(ngModel)]="quantite" min="1" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <button class="btn btn-primary fw-bold" (click)="enregistrerFacture()">
+      Enregistrer
+    </button>
+  </div>
+
+</div>
+
+<h3 class="text-primary mb-3 fw-bold">Factures existantes</h3>
+
+<div class="table-responsive">
+  <table class="table table-hover table-bordered align-middle text-center bg-white">
+    <thead class="table-primary text-white">
+      <tr>
+        <th>Date</th>
+        <th>Client</th>
+        <th>Produit</th>
+        <th>Quantité</th>
+        <th>Prix HT</th>
+        <th>TVA (20%)</th>
+        <th>Total TTC</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of factures">
+        <td>{{ f.date }}</td>
+        <td class="fw-semibold">{{ getClientName(f.clientId) }}</td>
+        <td class="fw-semibold">{{ getProduitName(f.produitId) }}</td>
+        <td>{{ f.quantite }}</td>
+        <td>{{ getPrixHT(f) }} €</td>
+        <td>{{ getTVA(f) }} €</td>
+        <td class="fw-bold">{{ getTotalTTC(f) }} €</td>
+        <td>
+          <button class="btn btn-primary btn-sm me-1" (click)="chargerFacturePourModification(f)">
+            Modifier
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="supprimerFacture(f)">
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  table.table-hover tbody tr:hover {
+    background-color: #cfe2ff !important;
+    transition: background-color 0.3s;
+  }
+</style>

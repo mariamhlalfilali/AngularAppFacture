@@ -1,0 +1,86 @@
+
+<div *ngIf="message" class="alert alert-danger text-center mb-3">
+  {{ message }}
+</div>
+
+<h2 class="mb-4 text-primary fw-bold d-flex align-items-center">
+  <span style="color:#0d6efd; font-size:32px;" class="me-2">👥</span>
+  Gestion des Clients
+</h2>
+
+
+<form #clientForm="ngForm" novalidate>
+  <div class="card p-4 mb-4 rounded-3 shadow-lg d-flex justify-content-center align-items-center"
+       style="border-width: 2px; border-color:#cfe2ff; min-height: 250px;">
+
+    <div style="width: 100%;">
+      <div class="mb-3">
+        <input type="text" class="form-control mb-2" placeholder="Nom" [(ngModel)]="nom" name="nom" required #nomInput="ngModel">
+        <div class="text-danger small" *ngIf="nomInput.invalid && nomInput.touched">
+          Le nom est requis.
+        </div>
+
+        <input type="email" class="form-control mb-2" placeholder="Email@gmail.com" [(ngModel)]="email" name="email" required email #emailInput="ngModel">
+        <div class="text-danger small" *ngIf="emailInput.invalid && emailInput.touched">
+          Entrez un email valide.
+        </div>
+      </div>
+
+      <div class="mb-3 ">
+        <button class="btn btn-primary fw-bold"
+                
+                [ngClass]="editingId ? 'btn-success' : 'btn-primary'"
+                (click)="saveClient()">
+          {{ editingId ? 'Modifier' : 'Ajouter' }} Client
+        </button>
+        <button *ngIf="editingId" class="btn btn-secondary ms-2" (click)="resetForm()">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<div class="mt-4">
+  <table class="table table-hover table-bordered align-middle text-center bg-white">
+    <thead class="table-primary text-white">
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of clients">
+        <td class="fw-semibold">{{ client.nom }}</td>
+        <td>{{ client.email }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm me-2" (click)="editClient(client)">
+            Modifier
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteClient(client.id)">
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<style>
+  .card {
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+  }
+
+  table.table-hover tbody tr:hover {
+    background-color: #cfe2ff !important; 
+    transition: background-color 0.3s;
+  }
+
+  table th, table td {
+    vertical-align: middle;
+  }
+</style>
